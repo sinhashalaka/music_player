@@ -3,11 +3,16 @@ from subprocess import check_output
 import psutil
 import time
 
+directory = input('Enter Directory (press enter for current folder): ')
+
+if not directory:
+	directory = ''
+if directory[-1] == '/':
+	directory = directory[:-1]
 
 #check for mp3 files
-out = check_output("ls |grep .mp3",shell=True,stderr=subprocess.STDOUT,).decode("utf-8")
-l = list()
-l = out.split("\n")
+out = check_output("ls " + directory + "|grep .mp3",shell=True,stderr=subprocess.STDOUT,).decode("utf-8")
+l = [directory + '/' + i for i in out.split("\n")]
 #list of mp3 files in the folder
 print (out)
 n = len(l)
@@ -22,6 +27,7 @@ while True:
 		print ("playing ... "+l[0])
 		return_code = subprocess.Popen(["afplay", l[count]]).pid
 	elif c == 'n':
+		print ('shalaka')
 		#play next song
 		if count+1 < n :
 			count = count + 1
@@ -60,5 +66,4 @@ while True:
 		c = 'n'
 	p = psutil.Process(return_code)
 	#terminate the current process(stop the current song) and start the chosen one
-	p.terminate() 
-time.sleep(50)
+	p.terminate()
