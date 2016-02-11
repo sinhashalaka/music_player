@@ -4,9 +4,11 @@ import curses
 import psutil
 
 
+#check for mp3 files
 out = check_output("ls |grep .mp3",shell=True,stderr=subprocess.STDOUT,).decode("utf-8")
 l = list()
 l = out.split("\n")
+#list of mp3 files in the folder
 print (out)
 n = len(l)
 n = n-1
@@ -17,9 +19,7 @@ while True:
 	if c == 's':
 		count = 0
 		print ("playing ... "+l[0])
-		# return_code = subprocess.call(["afplay", l[count]])
 		return_code = subprocess.Popen(["afplay", l[count]]).pid
-		print (return_code)
 	elif c == 'n':
 		if count+1 < n :
 			count = count + 1
@@ -49,6 +49,7 @@ while True:
 			return_code = subprocess.Popen(["afplay", l[count]]).pid
 	c = input("Enter 'n' to choose next song , 'p' to choose previous song or song no. \n => ")
 	p = psutil.Process(return_code)
+	#terminate the current process(stop the current song) and start the chosen one
 	p.terminate() 
 import time
 time.sleep(50)
